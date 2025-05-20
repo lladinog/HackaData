@@ -3,18 +3,24 @@ import mysql.connector
 from mysql.connector import Error
 import os
 from dotenv import load_dotenv
+from sqlalchemy import create_engine
 
 # Cargar las variables de entorno desde el archivo .env
 load_dotenv()
+
+DB_HOST = os.getenv("DB_HOST")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
 
 # Configuración de la conexión a la base de datos
 def get_connection():
     try:
         conexion = mysql.connector.connect(
-            host=os.getenv("DB_HOST"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            database=os.getenv("DB_NAME")
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
         )
         if conexion.is_connected():
             print("✅ Conexión exitosa a la base de datos")
@@ -22,7 +28,12 @@ def get_connection():
     except Error as e:
         print(f"❌ Error al conectar a MySQL: {e}")
         return None
-    
+
+# Configuración de SQLAlchemy para la conexión a la base de datos
+def get_engine():
+    engine = create_engine(f"mysql+mysqlconnector://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}")
+    return engine
+
 # PROVISIONAL= Verifica si se está conectando a la base de datos SE BORRA AL FINALIZAR
 if __name__ == "__main__":
     # Conectar a la base de datos
