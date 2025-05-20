@@ -38,7 +38,11 @@ def get_engine():
 if __name__ == "__main__":
     # Conectar a la base de datos
     conexion = get_connection()
+    engine = get_engine()
 
+    if engine:
+        print("✅ Conexión exitosa a la base de datos con SQLAlchemy")
+        
     # Verificar si la conexión fue exitosa
     if conexion:
         # Crear un cursor para ejecutar consultas
