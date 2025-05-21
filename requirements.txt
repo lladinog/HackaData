@@ -91,8 +91,8 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.1.0
 python-json-logger==3.3.0
 pytz==2025.2
-# pywin32==310
-# pywinpty==2.0.15
+pywin32==310
+pywinpty==2.0.15
 PyYAML==6.0.2
 pyzmq==26.4.0
 referencing==0.36.2
@@ -125,5 +125,5 @@ websocket-client==1.8.0
 Werkzeug==3.0.6
 widgetsnbextension==4.0.14
 zipp==3.21.0
-dash
-dash_bootstrap_components
+dash==3.0.4
+dash-bootstrap-components==2.0.2
