@@ -7,88 +7,82 @@ from components.cards import create_card
 from components.alerts import create_alert
 from datetime import datetime, date
 import plotly.graph_objects as go
-
-# ============ Página de Ventas ============
-# Datos financieros
-financial_data = pd.DataFrame({
-    'Mes': ['Enero', 'Febrero', 'Marzo', 'Abril'],
-    'Ventas': [1200000, 1500000, 1100000, 1800000],
-    'Egresos': [900000, 950000, 850000, 1100000],
-    'Flujo_Caja': [300000, 550000, 250000, 700000]
-})
-
-# Datos de ventas
-sales_data = pd.DataFrame({
-    'Producto': ['Producto A', 'Producto B', 'Producto C', 'Producto D', 'Producto E'],
-    'Ventas': [450000, 380000, 290000, 210000, 180000],
-    'Clientes': [45, 38, 29, 21, 18]
-})
+from data.data_ventas import get_financial_data, get_sales_data, get_top_clientes, get_kpi_data, get_date_range_defaults
 
 def get_layout():
+    # Obtener datos
+    financial_data = get_financial_data()
+    sales_data = get_sales_data()
+    top_clientes = get_top_clientes()
+    kpi_data = get_kpi_data()
+    date_defaults = get_date_range_defaults()
+    
     return html.Div([
-    html.H2("Ventas y Clientes", className="mb-4"),
-    
-    # Fila 1: Filtros y KPI
-    dbc.Row([
-        dbc.Col([
-            dbc.Label("Periodo de análisis:"),
-            dcc.DatePickerRange(
-                id='date-range-ventas',
-                min_date_allowed=date(2023, 1, 1),
-                max_date_allowed=date(2023, 12, 31),
-                start_date=date(2023, 4, 1),
-                end_date=date(2023, 4, 30)
-            )
-        ], md=4),
+        html.H2("Ventas y Clientes", className="title"),
         
-        dbc.Col(create_card("Crecimiento Mensual", "+12.5%", "fas fa-percentage", "success"), md=2),
-        dbc.Col(create_card("Ticket Promedio", "$45,200", "fas fa-shopping-cart", "info"), md=2),
-        dbc.Col(create_card("Clientes Nuevos", "8", "fas fa-user-plus", "primary"), md=2),
-        dbc.Col(create_card("Ventas Totales", "$1,800,000", "fas fa-dollar-sign", "warning"), md=2),
-    ], className="mb-4"),
-    
-    # Fila 2: Gráficos principales
-    dbc.Row([
-        dbc.Col([
-            html.H4("Ventas por Producto", className="mb-3"),
-            dcc.Graph(
-                figure=px.bar(sales_data, x='Producto', y='Ventas', 
-                             color='Ventas', title="Top Productos por Ventas",
-                             labels={'Producto': 'Producto', 'Ventas': 'Ventas ($)'})
-            )
-        ], md=6),
+        # Fila 1: Filtros y KPI
+        dbc.Row([
+            dbc.Col([
+                dbc.Label("Periodo de análisis:"),
+                dcc.DatePickerRange(
+                    id='date-range-ventas',
+                    min_date_allowed=date_defaults["min_date"],
+                    max_date_allowed=date_defaults["max_date"],
+                    start_date=date_defaults["start_date"],
+                    end_date=date_defaults["end_date"]
+                )
+            ], md=4),
+            
+            dbc.Col(create_card("Crecimiento Mensual", kpi_data["crecimiento_mensual"], "fas fa-percentage", "success"), md=2),
+            dbc.Col(create_card("Ticket Promedio", kpi_data["ticket_promedio"], "fas fa-shopping-cart", "info"), md=2),
+            dbc.Col(create_card("Clientes Nuevos", kpi_data["clientes_nuevos"], "fas fa-user-plus", "primary"), md=2),
+            dbc.Col(create_card("Ventas Totales", kpi_data["ventas_totales"], "fas fa-dollar-sign", "warning"), md=2),
+        ], className="mb-4"),
         
-        dbc.Col([
-            html.H4("Clientes por Producto", className="mb-3"),
-            dcc.Graph(
-                figure=px.pie(sales_data, values='Clientes', names='Producto', 
-                             title="Distribución de Clientes por Producto",
-                             hole=0.4)
-            )
-        ], md=6)
-    ]),
-    
-    # Fila 3: Detalle y comparativo
-    dbc.Row([
-        dbc.Col([
-            html.H4("Comparativo Mensual", className="mb-3"),
-            dcc.Graph(
-                figure=go.Figure(data=[
-                    go.Bar(name='Mes Actual', x=financial_data['Mes'], y=financial_data['Ventas']),
-                    go.Bar(name='Mes Anterior', x=financial_data['Mes'], y=financial_data['Ventas'].shift(1, fill_value=0))
-                ]).update_layout(barmode='group', title="Comparativo Ventas Mes Actual vs Anterior")
-            )
-        ], md=8),
+        # Fila 2: Gráficos principales
+        dbc.Row([
+            dbc.Col([
+                html.H4("Ventas por Producto", className="mb-3"),
+                dcc.Graph(
+                    figure=px.bar(sales_data, x='Producto', y='Ventas', 
+                                 color='Ventas', title="Top Productos por Ventas",
+                                 labels={'Producto': 'Producto', 'Ventas': 'Ventas ($)'},template="plotly_dark")
+                )
+            ], md=6),
+            
+            dbc.Col([
+                html.H4("Clientes por Producto", className="mb-3"),
+                dcc.Graph(
+                    figure=px.pie(sales_data, values='Clientes', names='Producto', 
+                                 title="Distribución de Clientes por Producto",
+                                 hole=0.4,template="plotly_dark")
+                )
+            ], md=6)
+        ]),
         
-        dbc.Col([
-            html.H4("Top 5 Clientes", className="mb-3"),
-            dbc.ListGroup([
-                dbc.ListGroupItem("Cliente A - $320,000"),
-                dbc.ListGroupItem("Cliente B - $290,000"),
-                dbc.ListGroupItem("Cliente C - $250,000"),
-                dbc.ListGroupItem("Cliente D - $210,000"),
-                dbc.ListGroupItem("Cliente E - $180,000")
-            ])
-        ], md=4)
-    ], className="mt-4")
-])
+        # Fila 3: Detalle y comparativo
+        dbc.Row([
+            dbc.Col([
+                html.H4("Comparativo Mensual", className="mb-3"),
+                dcc.Graph(
+                    figure=go.Figure(data=[
+                        go.Bar(name='Mes Actual', x=financial_data['Mes'], y=financial_data['Ventas']),
+                        go.Bar(name='Mes Anterior', x=financial_data['Mes'], y=financial_data['Ventas'].shift(1, fill_value=0))
+                    ]).update_layout(
+                        barmode='group',
+                        title="Comparativo Ventas Mes Actual vs Anterior",
+                        template="plotly_dark"  # <- Aquí es donde debe ir
+                    )
+                )
+            ], md=8),
+
+            
+            dbc.Col([
+                html.H4("Top 5 Clientes", className="mb-3"),
+                dbc.ListGroup([
+                    dbc.ListGroupItem(f"{cliente['nombre']} - ${cliente['ventas']:,}") 
+                    for cliente in top_clientes
+                ])
+            ], md=4)
+        ], className="mt-4")
+    ])

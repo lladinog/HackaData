@@ -8,7 +8,7 @@ from callbacks.main_callbacks import register_callbacks
 
 # Inicializar la app
 app = dash.Dash(__name__, 
-               external_stylesheets=[dbc.themes.BOOTSTRAP], 
+               external_stylesheets=[dbc.themes.JOURNAL], 
                suppress_callback_exceptions=True)
 app.title = "Dashboard Empresarial - ERP Analytics"
 
@@ -31,7 +31,7 @@ app.layout = html.Div([
                 dbc.Button("Actualizar", color="light", className="ms-3", id="refresh-btn")
             ], className="d-flex align-items-center")
         ]),
-        color="primary",
+        color="#1E2130",
         dark=True,
         sticky="top"
     ),
@@ -42,7 +42,7 @@ app.layout = html.Div([
     # Footer
     dbc.Container([
         html.Hr(),
-        html.P("© 2023 Dashboard Empresarial - ERP Analytics", className="text-center text-muted")
+        html.P("© 2025 Datahack - ERP Analytics", className="text-center text-muted")
     ])
 ])
 
