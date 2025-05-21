@@ -43,18 +43,25 @@ def get_layout():
                     figure=px.bar(inventory_data, y='Producto', x='Stock', 
                                 color='Stock', orientation='h',
                                 title="Stock Actual vs Mínimo Requerido",
-                                labels={'Producto': 'Producto', 'Stock': 'Unidades'})
+                                labels={'Producto': 'Producto', 'Stock': 'Unidades'},
+                                template="plotly_dark")
                 )
             ], md=6),
             
             dbc.Col([
                 html.H4("Rotación de Inventario", className="mb-3"),
-                dcc.Graph(
-                    figure=px.scatter(inventory_data, x='Producto', y='Rotacion', 
-                                    size='Stock', color='Rotacion',
-                                    title="Rotación de Inventario (Tamaño = Stock)")
-                )
-            ], md=6)
+                    dcc.Graph(
+                        figure=px.scatter(
+                            inventory_data,
+                            x='Producto',
+                            y='Rotacion',
+                            size='Stock',
+                            color='Rotacion',
+                            title="Rotación de Inventario (Tamaño = Stock)",
+                            template="plotly_dark"
+                        )
+                    )
+                ], md=6)
         ]),
         
         # Fila 3: Tabla de alertas

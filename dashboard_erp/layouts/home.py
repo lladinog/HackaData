@@ -80,8 +80,12 @@ def get_layout():
                                 }
                             }
                         )
-                    ]).update_layout(height=300)
+                    ]).update_layout(
+                        height=300,
+                        template="plotly_dark"  # <- Aquí va el template
+                    )
                 )
+
             ], md=6)
         ]),
         

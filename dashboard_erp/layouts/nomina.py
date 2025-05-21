@@ -37,9 +37,14 @@ def get_layout():
             dbc.Col([
                 html.H4("Evolución de Nómina", className="mb-3"),
                 dcc.Graph(
-                    figure=px.line(payroll_data, x='Mes', y='Total_Nomina',
-                                title="Costo de Nómina Últimos Meses",
-                                labels={'Total_Nomina': 'Valor ($)', 'Mes': 'Mes'})
+                    figure=px.line(
+                        payroll_data,
+                        x='Mes',
+                        y='Total_Nomina',
+                        title="Costo de Nómina Últimos Meses",
+                        labels={'Total_Nomina': 'Valor ($)', 'Mes': 'Mes'},
+                        template='plotly_dark'
+                    )
                 )
             ], md=7),
             
@@ -49,7 +54,7 @@ def get_layout():
                     figure=go.Figure(data=[
                         go.Pie(labels=dian_data['Estado'], 
                               values=dian_data['Porcentaje'])
-                    ]).update_layout(title_text="Estado Envío Nómina Electrónica")
+                    ]).update_layout(title_text="Estado Envío Nómina Electrónica",template="plotly_dark" )
                 ),
                 
                 html.Div([
@@ -64,11 +69,16 @@ def get_layout():
             dbc.Col([
                 html.H4("Distribución de Nómina", className="mb-3"),
                 dcc.Graph(
-                    figure=px.bar(distribucion_nomina, 
-                                x='Concepto', y='Valor',
-                                title="Composición del Gasto en Nómina",
-                                labels={'Concepto': 'Concepto', 'Valor': 'Valor ($)'})
+                figure=px.bar(
+                    distribucion_nomina,
+                    x='Concepto',
+                    y='Valor',
+                    title="Composición del Gasto en Nómina",
+                    labels={'Concepto': 'Concepto', 'Valor': 'Valor ($)'},
+                    template='plotly_dark'
                 )
+            )
+
             ])
         ], className="mt-4")
     ])
