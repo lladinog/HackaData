@@ -24,3 +24,7 @@ setup
 # Archivo .env
 
 Copie el archivo .envexample Reemplace sus valores y llamelo .env
+
+
+Link de tablero SCRUM y toda la metodología realizada y aplicada: 
+https://trello.com/b/24Bwis4m
