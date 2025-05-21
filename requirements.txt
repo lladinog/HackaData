@@ -127,3 +127,4 @@ widgetsnbextension==4.0.14
 zipp==3.21.0
 dash==3.0.4
 dash-bootstrap-components==2.0.2
+gunicorn
